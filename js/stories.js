@@ -108,3 +108,14 @@ function putFavoritesListOnPage() {
 
   $favoritedStories.show();
 }
+
+$favoritedStories.on("click", ".star", async function () {
+  const storyID = $(this).closest("li").attr("id");
+  if ($(this).children("i").hasClass("fas")) {
+    await currentUser.removeFavoriteStory(storyID);
+    $(this).children("i").toggleClass("fas far");
+  } else {
+    await currentUser.addFavoriteStory(storyID);
+    $(this).children("i").toggleClass("fas far");
+  }
+});
