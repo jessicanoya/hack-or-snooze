@@ -38,7 +38,7 @@
       </div>
       <div class="main-nav-links hidden">
         |
-        <a href="#" class="nav-link" id="nav-sumbit-story">submit</a>
+        <a href="#" class="nav-link" id="nav-submit-story">submit</a>
         |
         <a href="#" class="nav-link" id="nav-favorites">favorites</a>
         |
@@ -54,7 +54,7 @@
     <!-- area for stories (all stories, user stories, favorites) -->
     <section class="stories-container container">
       <!-- form for submitted new story -->
-      <form class="hidden" id="submit-form" style="display: flex">
+      <form class="hidden" id="submit-form">
         <div>
           <label for="create-author">author</label>
           <input type="text" id="create-author" placeholder="author name" />
@@ -70,6 +70,7 @@
         <button type="submit">submit</button>
         <hr />
       </form>
+
       <!-- loading message (removed by JS after stories loaded) -->
       <div id="stories-loading-msg">Loading&hellip;</div>
 
