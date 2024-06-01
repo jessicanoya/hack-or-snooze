@@ -8,7 +8,6 @@ let storyList;
 async function getAndShowStoriesOnStart() {
   storyList = await StoryList.getStories();
   $storiesLoadingMsg.remove();
-
   putStoriesOnPage();
 }
 
@@ -27,8 +26,8 @@ function generateStoryMarkup(story) {
 
   const hostName = story.getHostName();
   return $(`
-      <li id="${story.storyId}">
-        <div>
+    <li id="${story.storyId}">
+       <div>
         ${showStar ? getStarHTML(story, currentUser) : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
@@ -84,12 +83,29 @@ $("#submit-form").on("submit", handleSubmitNewStory);
 /** Make favorite/not-favorite star for story */
 
 function getStarHTML(story, user) {
-  const isFavorite = user.favorites.some(
-    (favorite) => favorite.storyId === story.storyId
-  );
+  const isFavorite = user.isFavorite(story.storyId);
   const starType = isFavorite ? "fas" : "far";
   return `
-      <span class="star">
+      <span class="star" data-story-id="${story.storyId}">
         <i class="${starType} fa-star"></i>
       </span>`;
+}
+
+$allStoriesList.on("click", ".star", async function () {
+  const storyID = $(this).closest("li").attr("id");
+  if ($(this).children("i").hasClass("fas")) {
+    await currentUser.removeFavoriteStory(storyID);
+    $(this).children("i").toggleClass("fas far");
+  } else {
+    await currentUser.addFavoriteStory(storyID);
+    $(this).children("i").toggleClass("fas far");
+  }
+});
+
+function markFavorites() {
+  for (let story of storyList.stories) {
+    if (currentUser.isFavorite(story.storyId)) {
+      $(`#${story.storyId} .star`).removeClass("far").addClass("fas");
+    }
+  }
 }
