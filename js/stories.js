@@ -22,15 +22,21 @@ async function getAndShowStoriesOnStart() {
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
+  // if a user is logged in, show favorite/not-favorite star
+  const showStar = Boolean(currentUser);
+
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
+        <div>
+        ${showStar ? getStarHTML(story, currentUser) : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
+        </div>
       </li>
     `);
 }
@@ -68,8 +74,22 @@ async function handleSubmitNewStory(evt) {
   const $newStoryMarkup = generateStoryMarkup(newStory);
   $allStoriesList.prepend($newStoryMarkup);
 
-  $("#submit-form").trigger("reset").hide();
+  $("#submit-form").trigger("reset");
+  $submitForm.slideUp("slow");
   $allStoriesList.show();
 }
 
 $("#submit-form").on("submit", handleSubmitNewStory);
+
+/** Make favorite/not-favorite star for story */
+
+function getStarHTML(story, user) {
+  const isFavorite = user.favorites.some(
+    (favorite) => favorite.storyId === story.storyId
+  );
+  const starType = isFavorite ? "fas" : "far";
+  return `
+      <span class="star">
+        <i class="${starType} fa-star"></i>
+      </span>`;
+}
