@@ -1,9 +1,6 @@
 "use strict";
 
-// This is the global list of the stories, an instance of StoryList
 let storyList;
-
-/** Get and show stories when site first loads. */
 
 async function getAndShowStoriesOnStart() {
   storyList = await StoryList.getStories();
@@ -11,17 +8,7 @@ async function getAndShowStoriesOnStart() {
   putStoriesOnPage();
 }
 
-/**
- * A render method to render HTML for an individual Story instance
- * - story: an instance of Story
- *
- * Returns the markup for the story.
- */
-
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
-
-  // if a user is logged in, show favorite/not-favorite star
   const showStar = Boolean(currentUser);
 
   const hostName = story.getHostName();
@@ -40,14 +27,11 @@ function generateStoryMarkup(story) {
     `);
 }
 
-/** Gets list of stories from server, generates their HTML, and puts on page. */
-
 function putStoriesOnPage() {
   console.debug("putStoriesOnPage");
 
   $allStoriesList.empty();
 
-  // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
@@ -80,8 +64,6 @@ async function handleSubmitNewStory(evt) {
 
 $("#submit-form").on("submit", handleSubmitNewStory);
 
-/** Make favorite/not-favorite star for story */
-
 function getStarHTML(story, user) {
   const isFavorite = user.isFavorite(story.storyId);
   const starType = isFavorite ? "fas" : "far";
@@ -108,4 +90,21 @@ function markFavorites() {
       $(`#${story.storyId} .star`).removeClass("far").addClass("fas");
     }
   }
+}
+
+function putFavoritesListOnPage() {
+  console.debug("putFavoritesListOnPage");
+
+  $favoritedStories.empty();
+
+  if (currentUser.favorites.length === 0) {
+    $favoritedStories.append("<h5>No favorites added!</h5>");
+  } else {
+    for (let story of currentUser.favorites) {
+      const $story = generateStoryMarkup(story);
+      $favoritedStories.append($story);
+    }
+  }
+
+  $favoritedStories.show();
 }
