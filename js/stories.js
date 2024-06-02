@@ -14,7 +14,6 @@ function generateStoryMarkup(story) {
   const hostName = story.getHostName();
   return $(`
     <li id="${story.storyId}">
-       <div>
         ${showStar ? getStarHTML(story, currentUser) : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
@@ -22,7 +21,6 @@ function generateStoryMarkup(story) {
         <small class="story-hostname">(${hostName})</small>
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
-        </div>
       </li>
     `);
 }
@@ -62,7 +60,7 @@ async function handleSubmitNewStory(evt) {
   $allStoriesList.show();
 }
 
-$("#submit-form").on("submit", handleSubmitNewStory);
+$submitForm.on("submit", handleSubmitNewStory);
 
 function getStarHTML(story, user) {
   const isFavorite = user.isFavorite(story.storyId);

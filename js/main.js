@@ -18,6 +18,8 @@ const $navSubmitStory = $("#nav-submit-story");
 const $favoritedStories = $("#favorited-stories");
 const $navFavorites = $("#nav-favorites");
 
+const $ownStories = $("#my-stories");
+
 function hidePageComponents() {
   const components = [
     $allStoriesList,
